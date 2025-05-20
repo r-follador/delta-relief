@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>LiDAR Delta-Relief Graubünden</title>
+
+  <!-- MapLibre GL JS (v5) -->
+  <link href="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.css" rel="stylesheet">
+  <script src="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.js"></script>
+
+  <style>
+    :root{ --control-h:56px; }
+    @media (min-width:600px){ :root{ --control-h:50px; } }
+
+    html,body{ margin:0; height:100%; font-family:system-ui,sans-serif; font-size:16px; overscroll-behavior:none; }
+    #map{ position:absolute; inset:0; bottom:var(--control-h); transform:translateZ(0); }
+
+    #controls{
+      position:absolute; bottom:10px; left:0; width:100%; height:var(--control-h);
+      display:flex; gap:.5rem; align-items:center; padding:0 .5rem;
+      background:#fafafaCC; border-top:1px solid #ddd; backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
+      box-sizing:border-box; touch-action:none;
+    }
+    #controls button{
+      flex:0 0 auto; min-width:64px; padding:.5rem 1rem;
+      font-size:clamp(.9rem,3.5vw,1.1rem); border:1px solid #777; border-radius:6px;
+      background:#fff; cursor:pointer; line-height:1.2; user-select:none;
+    }
+    #controls button.active,
+    #controls button:hover:not(#geoBtn){ background:#0066cc; color:#fff; border-color:#0066cc; }
+    #geoBtn{ margin-left:auto; font-size:clamp(1.25rem,5vw,1.5rem); line-height:1; padding:.5rem .8rem; }
+    #geoBtn:hover{ background:#0066cc; color:#fff; border-color:#0066cc; }
+  </style>
+</head>
+<body>
+<div id="map"></div>
+
+<div id="controls">
+  <button data-layer="satellite">Satellite</button>
+  <button data-layer="map">Map</button>
+  <button data-layer="lidar" class="active">LiDAR</button>
+  <button id="geoBtn" title="Zoom to my location">🛰️</button>
+</div>
+
+<script>
+  /* ── helpers ─────────────────────────────────────────────────────────────── */
+  function getURLCoords(){
+    const p = new URLSearchParams(location.search);
+    const lat = parseFloat(p.get('lat'));
+    const lon = parseFloat(p.get('lon') ?? p.get('lng'));
+    return Number.isFinite(lat) && Number.isFinite(lon) ? [lon, lat] : null;
+  }
+  function shareURL(lon, lat){
+    const url = `${location.origin}${location.pathname}?lat=${lat.toFixed(6)}&lon=${lon.toFixed(6)}`;
+    history.replaceState(null, '', url);
+    window.prompt('Share or copy this link', url);
+  }
+
+  /* ── map style ───────────────────────────────────────────────────────────── */
+  const style = {
+    version: 8,
+    sources: {
+      lidar:{ type:'raster', tiles:[
+          'https://lidar.cubetrek.com/mbtiles/lidar/tiles/{z}/{x}/{y}.png'
+        ], tileSize:256, minzoom:14, maxzoom:18, attribution:'© swisstopo | Rainer' },
+      satellite:{ type:'raster', tiles:[
+          'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.swissimage/default/current/3857/{z}/{x}/{y}.jpeg'
+        ], tileSize:256, minzoom:14, maxzoom:18, attribution:'© swisstopo' },
+      map:{ type:'raster', tiles:[
+          'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/3857/{z}/{x}/{y}.jpeg'
+        ], tileSize:256, minzoom:14, maxzoom:18, attribution:'© swisstopo' }
+    },
+    layers:[
+      {id:'lidar',     type:'raster', source:'lidar',     layout:{visibility:'visible'}},
+      {id:'satellite', type:'raster', source:'satellite', layout:{visibility:'none'}},
+      {id:'map',       type:'raster', source:'map',       layout:{visibility:'none'}},
+    ]
+  };
+
+  /* ── map init ────────────────────────────────────────────────────────────── */
+  const startPos = getURLCoords() ?? [9.557593, 46.974507];
+
+  const map = new maplibregl.Map({
+    container:'map',
+    style,
+    center:startPos,
+    zoom:15,
+    minZoom:14,
+    maxZoom:17,
+    pitch:0,
+    maxPitch:0,
+    pitchWithRotate:false            // extra safety
+  });
+
+  /* lock north-up and prevent tilt/rotate */
+  map.dragRotate.disable();
+  map.touchZoomRotate.disableRotation();
+  map.on('style.load', ()=> { map.setBearing(0); map.setPitch(0); });
+
+  /* ── layer switch ───────────────────────────────────────────────────────── */
+  document.querySelectorAll('#controls button[data-layer]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const tgt = btn.dataset.layer;
+      ['satellite','map','lidar'].forEach(l =>
+              map.setLayoutProperty(l,'visibility', l===tgt ? 'visible' : 'none')
+      );
+      document.querySelectorAll('#controls button[data-layer]').forEach(b=>
+              b.classList.toggle('active', b===btn)
+      );
+    });
+  });
+
+  /* ── marker logic ───────────────────────────────────────────────────────── */
+  let userMarker = null;
+  function setMarker(lon, lat){
+    if(!userMarker){
+      userMarker = new maplibregl.Marker({color:'#d00'})
+              .setLngLat([lon, lat])
+              .addTo(map);
+    }else{
+      userMarker.setLngLat([lon, lat]);
+    }
+  }
+
+  /* load marker from URL, if given */
+  map.on('load', ()=>{
+    if(getURLCoords()){
+      setMarker(startPos[0], startPos[1]);
+      map.flyTo({center:startPos, zoom:16});
+    }
+  });
+
+  /* GPS button */
+  document.getElementById('geoBtn').addEventListener('click', ()=>{
+    if(!navigator.geolocation){
+      alert('Geolocation isn’t supported by this browser.'); return;
+    }
+    navigator.geolocation.getCurrentPosition(pos=>{
+              const {longitude, latitude} = pos.coords;
+              setMarker(longitude, latitude);
+              map.flyTo({center:[longitude, latitude], zoom:16});
+            }, err=>alert('Couldn’t get your position: '+err.message),
+            {enableHighAccuracy:true, timeout:10000});
+  });
+
+  /* simple click-to-share */
+  map.on('click', e=>{
+    const {lng, lat} = e.lngLat;
+    setMarker(lng, lat);
+    shareURL(lng, lat);
+  });
+</script>
+</body>
+</html>
