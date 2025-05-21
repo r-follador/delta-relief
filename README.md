@@ -1,4 +1,4 @@
-![delta-relief_social_media.png](delta-relief_social_media.png)
+![delta-relief_social_media.png](readme-files/delta-relief_social_media.png)
 
 # delta-relief
 High-resolution surface analysis with LiDAR data
@@ -6,7 +6,7 @@ High-resolution surface analysis with LiDAR data
 ## Introduction
 
 Airborne LiDAR uses hundreds of thousands of laser pulses per second to generate detailed 3D maps, even through vegetation.
-With point densities of several per square meter, 10 cm accuracy, and high speed, it is among the most effective methods for mapping topography.
+With high point densities and 10 cm accuracy, it is among the most effective methods for mapping topography.
 
 <img src="https://prod-swisstopoch-hcms-sdweb.imgix.net/2023/11/14/369054be-3d12-46aa-acb6-d7eef0a761f8.jpg" alt="Airborne LiDAR" width="600"/>
 
@@ -48,7 +48,7 @@ Some examples of interesting features in the covered area (North Graubünden).
 > Help me extend this list! Send a pull request or mail to: [contact@cubetrek.com](mailto:contact@cubetrek.com) if
 > you know of any other interesting examples.
 
-See also the Jupyter Notebook ([delta-relief-notebook.ipynb](delta-relief-notebook.ipynb)) for more examples in other places of Switzerland.
+See also the Jupyter Notebook ([delta-relief-notebook.ipynb](delta-relief_examples.ipynb)) for more examples in other places of Switzerland.
 
 ### Colm La Runga
 [![img.png](readme-files/colm-la-runga.png)](https://lidar.cubetrek.com/?lat=46.635453&lon=9.610046)
@@ -100,5 +100,74 @@ Sources:
 ## Technical Details
 
 ### Visualization of LiDAR data
+
+The figures below are created in the [Visualization trials Jupyter Notebook](delta-relief_visualization_trials.ipynb).
+
+To demonstrate how to display subtle terrain changes in the best way, we use two examples:
+the Rohanschanze on the left illustrates clearly visible earthworks in flat terrain, while the
+Colm La Runga on the right highlights more subtle features in a mountainous landscape.
+
+The input data consists of absolute elevation values (height above sea level). A basic way to visualize this is as a
+grayscale gradient-black representing the lowest and white the highest altitude within each tile.
+
+While the fort is visible, the Roman camp gets completely lost in the surrounding mountainous terrain.
+
+![visualization_trial_1.png](readme-files/visualization_trial_1.png)
+
+n scientific visualizations, elevation data is often rendered using *hillshading*.
+
+This produces a natural-looking terrain representation, but it requires significant tuning to make subtle features
+visible, especially in hilly terrain. (I couldn't manage for the Roman camp). So it's not ideal for our purposes.
+
+![visualization_trial_2.png](readme-files/visualization_trial_2.png)
+
+Our focus is not on absolute elevation, but on detecting subtle terrain variations.
+
+To achieve this, we compute the slope at each point: an approximation of the first derivative along both axes.
+
+This yields significantly finer details, and the Roman camp becomes clearly visible (centered in the lower left quadrant).
+
+![visualization_trial_3.png](readme-files/visualization_trial_3.png)
+
+To enhance subtle variations even further, we apply a non-linear transformation to the slope values: fine gradients are exaggerated while steeper slopes remain mostly unchanged.
+
+This strikes a good balance: broad features remain visible, and fine details become much clearer. In mountainous areas, the output becomes brighter overall, but with some getting used to, more structure can be perceived.
+
+![visualization_trial_4.png](readme-files/visualization_trial_4.png)
+
+We can also go a step further and run another differentiation (basically a second derivative), in the hope to uncover more details.
+
+However, this primarily amplifies noise and yields no real improvement.
+
+![visualization_trial_5.png](readme-files/visualization_trial_5.png)
+
+Going back to the first derivative, we can apply a colormap to encode the slope magnitude.
+
+This approach works well in relatively flat regions (e.g. the first example), but becomes visually overwhelming in complex, mountainous terrain, where everything tends to shift towards red.
+
+![visualization_trial_6.png](readme-files/visualization_trial_6.png)
+
+
+### Hosting the data
+
+[mbtileserver](https://github.com/consbio/mbtileserver) provides an easy way to
+host *mbtiles* so that they can be used as a map layer in [MapLibre JS](https://maplibre.org/).
+
+To create the mbtiles file, we
+
+- run the [create_geotiff.py](create_geotiff.py) script to download the GeoTiffs, convert the data as described above and save it as GeoTiff again
+- use [GDAL](https://gdal.org/en/stable/index.html) to build the mbtiles file while converting the GeoTIFF from LVB95 (the Swiss coordinates system) to Web Mercator (EPSG:3857).
+
+```
+gdalbuildvrt -a_srs EPSG:2056 lv95.vrt calculated/*.tif
+gdalwarp -s_srs EPSG:2056 -t_srs EPSG:3857 -tap -tr 0.5 0.5 -r bilinear -co COMPRESS=DEFLATE -co TILED=YES -co BIGTIFF=YES lv95.vrt webmerc.tif
+gdal_translate -of MBTILES webmerc.tif lidar.mbtiles
+gdaladdo -r average lidar.mbtiles 2 4 8 16
+```
+
+NGINX is used as a reverse proxy to relay between the client and the mbtileserver and also to host the static
+[index file](index.html), that uses MabLibre JS.
+
+
 
 

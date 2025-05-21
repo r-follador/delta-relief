@@ -4,9 +4,6 @@ from Delta_Relief import DeltaRelief_GeoTiff, LidarLinks_GeoTiff
 import rasterio
 from tqdm import tqdm
 
-
-
-
 lidar_links = LidarLinks_GeoTiff()
 
 def save_geotiff(east, north):
