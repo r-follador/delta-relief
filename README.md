@@ -1,7 +1,9 @@
 ![delta-relief_social_media.png](readme-files/delta-relief_social_media.png)
 
 # delta-relief
-High-resolution surface analysis with LiDAR data
+High-resolution surface analysis with LiDAR data.
+
+See [lidar.cubetrek.com](https://lidar.cubetrek.com) for access to the dataset.
 
 ## Introduction
 
@@ -33,16 +35,15 @@ This project aims to improve accessibility to the data in two main steps:
 - Visualize the SwissTopo data as images that highlight subtle terrain changes for easier interpretation
 - Deploy the data in an interactive, mobile-friendly online map
 
-Currently, part of this data of eastern Switzerland (North Graubünden) is accessible on https://lidar.cubetrek.com
+This data is accessible on https://lidar.cubetrek.com
 
 [![img.png](readme-files/mobile_screenshot.png)](https://lidar.cubetrek.com)
-
 The online map allows to quickly pan to the current location via GPS and switch between three different map layers
 (LiDAR, this project; Aerial View and Map View, data from SwissTopo).
 
 ## Points of Interest
 
-Some examples of interesting features in the covered area (North Graubünden). 
+Some examples of interesting features in Switzerland.
 
 > [!NOTE]
 > Help me extend this list! Send a pull request or mail to: [contact@cubetrek.com](mailto:contact@cubetrek.com) if
@@ -53,14 +54,13 @@ See also the Jupyter Notebook ([delta-relief-notebook.ipynb](delta-relief_exampl
 ### Colm La Runga
 [![img.png](readme-files/colm-la-runga.png)](https://lidar.cubetrek.com/?lat=46.635453&lon=9.610046)
 
-Remains of a roman camp sitting at an altitude of 2200 m ASL. Likely around 15 BC, marking the start of the Roman occupation of this area of the Alps.
-
-The camp was discovered in 2024, and was partly an inspiration of this project, as LiDAR data was also used to help in the discovery.
-
 <img src="https://www.gr.ch/DE/Medien/Mitteilungen/MMStaka/2024/PublishingImages/Foto_Colm_la_Runga_5_Foto_Andrea_Badrutt_Chur__w_1200__h_0.jpg" alt="Colm La Runga" width="250"/>
 <img src="https://www.srf.ch/static/cms/images/1280w/o-dpr-2/caafa61.webp" alt="Colm La Runga" width="250"/>
 <img src="https://www.srf.ch/static/cms/images/1280w/o-dpr-2/60719ef.webp" alt="Colm La Runga" width="250"/>
 
+Remains of a roman camp sitting at an altitude of 2200 m ASL. Likely around 15 BC, marking the start of the Roman occupation of this area of the Alps.
+
+The camp was discovered in 2024, and was partly an inspiration of this project, as LiDAR data was also used to help in the discovery.
 
 Sources:
 - Picture source: [Kanton Graubünden](https://www.gr.ch/DE/Medien/Mitteilungen/MMStaka/2024/Seiten/2024082903.aspx)
@@ -69,33 +69,93 @@ Sources:
 
 ### Rohanschanze (Rohan's fortification)
 
-Built during the Thirty Years' War (1635) by the French Duke of Rohan. Only the earthwork remains.
-
 [![img.png](readme-files/rohan.png)](https://lidar.cubetrek.com/?lat=46.974573&lon=9.557507)
 
 <img src="readme-files/rohan2.png" alt="Colm La Runga" width="250"/>
+
+Built during the Thirty Years' War (1635) by the French Duke of Rohan. Only the earthwork remains.
 
 Sources:
 - [Burgenverein Untervaz, PDF, German](https://download.burgenverein-untervaz.ch/downloads/dorfgeschichte/1639-Die%20Rohanschanze%20und%20ihre%20Schleifung.pdf)
 - [Rohanschanze, Wikipedia, German](https://de.wikipedia.org/wiki/Rohanschanze)
 
+### Franc Castel
+[![img.png](readme-files/franc_castel.png)](https://lidar.cubetrek.com/?coords=527313,187289)
+
+<img src="readme-files/franc_castel_2.png" alt="Franc Castel" width="250"/>
+
+A castle built in the 14th century castle, destroyed in 1536. Remnants were used as a quarry to build the neighboring farm houses.
+
+Sources:
+- [Sainte-Croix, German](https://hls-dhs-dss.ch/de/articles/007583/2011-02-08/)
+- [Bulletin périodique de la Fondation Archives Vivantes, PDF, French](https://www.archeoplus.ch/fav/download/La_Pomme_13.pdf)
+
+### Chartreuse d'Oujon
+[![img.png](readme-files/oujon.png)](https://lidar.cubetrek.com/?coords=503458,146686)
+
+<img src="https://static.mycity.travel/manage/uploads/6/25/61546/1/ruine-d-oujon_2000.jpg" alt="Oujon" width="250"/>
+
+Monastery built in 1146, set on fire in 1537 during the Reformation.
+
+Sources:
+- [Oujon Charterhouse, Wiki](https://en.wikipedia.org/wiki/Oujon_Charterhouse)
+- Picture [Tourism Nyon](https://www.lacote-tourisme.ch/fr/V1490/sentier-spirituel-d-oujon)
 
 ### Cresta Settlement in Cazis
 [![img.png](readme-files/cazis.png)](https://lidar.cubetrek.com/?lat=46.711225&lon=9.430793)
 
+<img src="readme-files/cazis2.png" alt="Colm La Runga" width="250"/>
+<img src="https://upload.wikimedia.org/wikipedia/commons/d/d6/Cresta_Cazis_Tassen_Tonspulen.JPG" alt="Cazis" width="250"/>
 
 Bronze Age settlement situated on a hilltop, the settlement was continuously inhabited for approximately 500 to 600 years
 during the Early to Middle Bronze Age (circa 2000–1300 BCE).
 Excavations have uncovered multiple layers of occupation, revealing structures such as post-built houses, hearths, and storage pits.
-
-<img src="readme-files/cazis2.png" alt="Colm La Runga" width="250"/>
-<img src="https://upload.wikimedia.org/wikipedia/commons/d/d6/Cresta_Cazis_Tassen_Tonspulen.JPG" alt="Colm La Runga" width="250"/>
 
 
 Sources:
 - [Sonderheft Archäologischer Dienst Graubünden, PDF, German](https://www.somedia-buchverlag.ch/wp-content/uploads//download-sonderheft_5_leseprobe.pdf)
 - [Cresta-Siedlung, Wikipedia, German](https://de.wikipedia.org/wiki/Cresta-Siedlung)
 
+### Grossholz burial mounds
+[![img.png](readme-files/grossholz.png)](https://lidar.cubetrek.com/?coords=576474,208250)
+
+<img src="https://www.site-of-the-month.ch/assets/Uploads/projects/_resampled/FillWzEwMDgsNjMwXQ/reconstruction-grabhugel-6-Tschumi-1953-151.jpg" alt="Grossholz" width="250"/>
+<img src="https://www.site-of-the-month.ch/assets/Uploads/projects/_resampled/FillWyIxNDA4Iiw4ODBd/Grabhugel-sunnenrain-photo-adb.jpg" alt="Grossholz" width="250"/>
+
+Burial grounds of the early Iron Age (800-450 BC), see also [1km southwest](https://lidar.cubetrek.com/?coords=575565,207751)
+
+Sources:
+- [Site of the Month - Switzerland's past](https://www.site-of-the-month.ch/en/grabhuegel/)
+- [Fenis-Hasenburg, German](https://www.fenis-hasenburg.ch/)
+
+
+### Châtel d'Arrufens
+[![img.png](readme-files/arrufens.png)](https://lidar.cubetrek.com/?coords=517083,163498)
+
+<img src="readme-files/arrufens2.png" alt="Arrufens" width="250"/>
+<img src="readme-files/arrufens3.png" alt="Arrufens" width="250"/>
+
+Bronze age settlement, 1450 to 1200 BCE.
+
+Sources:
+- [David-Elbiali, Défense et ostentation à Châtel d'Arrufens, Montricher, 2003](https://archive-ouverte.unige.ch/unige:27094)
+
+### Canal d'Entreroches
+[![img.png](readme-files/entreroches.png)](https://lidar.cubetrek.com/?coords=531853,169683)
+
+During the Thirty Years War Protestant Netherlands wanted to have access to the Mediterranean sea without the dangerous journey around
+Catholic Spain. The Canal d'Entreroche was the most ambitious part trying to connect (North Sea -> Rhine River -> Aare River) Lake Neuchâtel to Lake Geneva
+(-> Rhone -> Mediterranean Sea). Construction started in 1638 and stopped ten years later without ever being completed.
+
+The idea became popular again in the 20th Century under the Name "Transhelvetique Canal", but was never further pursued.
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/8/88/Le_Transhelv%C3%A9tique_No_1.jpg" alt="transhelvetique" width="250"/>
+<img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Canal_d%27Entreroches_08_11.jpg" alt="transhelvetique" width="250"/>
+<img src="https://upload.wikimedia.org/wikipedia/commons/1/17/Le_Transhelv%C3%A9tique_Rh%C3%B4ne%E2%80%93Rhin.png" alt="transhelvetique" width="250"/>
+
+Sources:
+- [Canal d'Entreroches - Wiki](https://en.wikipedia.org/wiki/Canal_d%27Entreroches)
+- [Transhelvetischer Kanal - Wiki, German](https://de.wikipedia.org/wiki/Transhelvetischer_Kanal)
 
 ## Technical Details
 
@@ -114,14 +174,14 @@ While the fort is visible, the Roman camp gets completely lost in the surroundin
 
 ![visualization_trial_1.png](readme-files/visualization_trial_1.png)
 
-n scientific visualizations, elevation data is often rendered using *hillshading*.
+In scientific visualizations, elevation data is often rendered using *hillshading*.
 
 This produces a natural-looking terrain representation, but it requires significant tuning to make subtle features
 visible, especially in hilly terrain. (I couldn't manage for the Roman camp). So it's not ideal for our purposes.
 
 ![visualization_trial_2.png](readme-files/visualization_trial_2.png)
 
-Our focus is not on absolute elevation, but on detecting subtle terrain variations.
+Our focus is not on absolute elevation but on detecting subtle terrain variations.
 
 To achieve this, we compute the slope at each point: an approximation of the first derivative along both axes.
 
