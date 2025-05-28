@@ -44,17 +44,153 @@
 </div>
 
 <script>
-  /* ── helpers ─────────────────────────────────────────────────────────────── */
+
+  const minZoom_lidar = 14;
+  const minZoom_other = 10;
+  const maxZoom_all = 18;
   function getURLCoords(){
     const p = new URLSearchParams(location.search);
     const lat = parseFloat(p.get('lat'));
     const lon = parseFloat(p.get('lon') ?? p.get('lng'));
-    return Number.isFinite(lat) && Number.isFinite(lon) ? [lon, lat] : null;
+
+    if (Number.isFinite(lat) && Number.isFinite(lon)) {
+      console.log('URL coords lat lon', lat, lon);
+      return [lon, lat];
+    }
+
+    const east = parseFloat(p.get('east'));
+    const north = parseFloat(p.get('north'));
+
+    if (Number.isFinite(east) && Number.isFinite(north)) {
+      var coords = Swisstopo.CHtoWGS(east, north);
+      console.log('URL coords east north', east, north);
+      console.log('converted to', coords);
+      return [coords.lon, coords.lat];
+    }
+
+    return null;
   }
+
   function shareURL(lon, lat){
-    const url = `${location.origin}${location.pathname}?lat=${lat.toFixed(6)}&lon=${lon.toFixed(6)}`;
+
+    var coordsCH = Swisstopo.WGStoCH(lat, lon)
+
+    const url = `${location.origin}${location.pathname}?east=${(coordsCH.east).toFixed(0)}&north=${(coordsCH.north).toFixed(0)}`;
     history.replaceState(null, '', url);
     window.prompt('Share or copy this link', url);
+  }
+
+  //Courtesy: https://github.com/ValentinMinder/Swisstopo-WGS84-LV03/blob/master/scripts/js/wgs84_ch1903.js
+  var Swisstopo = {
+    WGStoCH: function (lat, lng) {
+      return {
+        east: this.WGStoCHy(lat, lng),
+        north: this.WGStoCHx(lat, lng)
+      }
+    },
+
+    // Convert WGS lat/lng (° dec) to CH x
+    WGStoCHx: function (lat, lng) {
+
+      // Convert decimal degrees to sexagesimal seconds
+      lat = this.DECtoSEX(lat);
+      lng = this.DECtoSEX(lng);
+
+      // Auxiliary values (% Bern)
+      var lat_aux = (lat - 169028.66)/10000;
+      var lng_aux = (lng - 26782.5)/10000;
+
+      // Process X
+      x = 200147.07 +
+              308807.95 * lat_aux  +
+              3745.25 * Math.pow(lng_aux,2) +
+              76.63 * Math.pow(lat_aux,2) -
+              194.56 * Math.pow(lng_aux,2) * lat_aux +
+              119.79 * Math.pow(lat_aux,3);
+
+      return x;
+    },
+
+    // Convert WGS lat/lng (° dec) to CH y
+    WGStoCHy: function (lat, lng) {
+      // Convert decimal degrees to sexagesimal seconds
+      lat = this.DECtoSEX(lat);
+      lng = this.DECtoSEX(lng);
+
+      // Auxiliary values (% Bern)
+      var lat_aux = (lat - 169028.66)/10000;
+      var lng_aux = (lng - 26782.5)/10000;
+
+      // Process Y
+      y = 600072.37 +
+              211455.93 * lng_aux -
+              10938.51 * lng_aux * lat_aux -
+              0.36 * lng_aux * Math.pow(lat_aux,2) -
+              44.54 * Math.pow(lng_aux,3);
+
+      return y;
+    },
+
+    CHtoWGS: function (y, x) {
+      return {
+        lon: this.CHtoWGSlng(y, x),
+        lat: this.CHtoWGSlat(y, x)
+      }
+    },
+
+    // Convert CH y/x to WGS lat
+    CHtoWGSlat: function (y, x) {
+      // Converts military to civil and to unit = 1000km
+      // Auxiliary values (% Bern)
+      var y_aux = (y - 600000)/1000000;
+      var x_aux = (x - 200000)/1000000;
+
+      // Process lat
+      var lat = 16.9023892 +
+              3.238272 * x_aux -
+              0.270978 * Math.pow(y_aux, 2) -
+              0.002528 * Math.pow(x_aux, 2) -
+              0.0447	 * Math.pow(y_aux, 2) * x_aux -
+              0.0140	 * Math.pow(x_aux, 3);
+
+      // Unit 10000" to 1 " and converts seconds to degrees (dec)
+      lat = lat * 100 / 36;
+
+      return lat;
+    },
+
+    // Convert CH y/x to WGS lng
+    CHtoWGSlng: function (y, x) {
+      // Converts military to civil and	to unit = 1000km
+      // Auxiliary values (% Bern)
+      var y_aux = (y - 600000)/1000000;
+      var x_aux = (x - 200000)/1000000;
+
+      // Process lng
+      var lng = 2.6779094 +
+              4.728982 * y_aux +
+              0.791484 * y_aux * x_aux +
+              0.1306	 * y_aux * Math.pow(x_aux, 2) -
+              0.0436	 * Math.pow(y_aux, 3);
+
+      // Unit 10000" to 1 " and converts seconds to degrees (dec)
+      lng = lng * 100 / 36;
+
+      return lng;
+    },
+
+    // Convert angle in decimal degrees to sexagesimal seconds
+    DECtoSEX: function (angle) {
+
+      // Extract DMS
+      var deg = parseInt(angle);
+      var min = parseInt((angle-deg)*60);
+      var sec = (((angle-deg)*60)-min)*60;
+
+      // Result sexagesimal seconds
+      return sec + min*60.0 + deg*3600.0;
+
+    }
   }
 
   /* ── map style ───────────────────────────────────────────────────────────── */
@@ -63,13 +199,13 @@
     sources: {
       lidar:{ type:'raster', tiles:[
           'https://lidar.cubetrek.com/mbtiles/lidar/tiles/{z}/{x}/{y}.png'
-        ], tileSize:256, minzoom:14, maxzoom:18, attribution:'© swisstopo | Rainer' },
+        ], tileSize:256, minzoom:minZoom_lidar, maxzoom:maxZoom_all, attribution:'© swisstopo | Rainer' },
       satellite:{ type:'raster', tiles:[
           'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.swissimage/default/current/3857/{z}/{x}/{y}.jpeg'
-        ], tileSize:256, minzoom:14, maxzoom:18, attribution:'© swisstopo' },
+        ], tileSize:256, minzoom:minZoom_other, maxzoom:maxZoom_all, attribution:'© swisstopo' },
       map:{ type:'raster', tiles:[
           'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/3857/{z}/{x}/{y}.jpeg'
-        ], tileSize:256, minzoom:14, maxzoom:18, attribution:'© swisstopo' }
+        ], tileSize:256, minzoom:minZoom_other, maxzoom:maxZoom_all, attribution:'© swisstopo' }
     },
     layers:[
       {id:'lidar',     type:'raster', source:'lidar',     layout:{visibility:'visible'}},
@@ -86,7 +222,7 @@
     style,
     center:startPos,
     zoom:15,
-    minZoom:14,
+    minZoom:minZoom_lidar,
     maxZoom:17,
     pitch:0,
     maxPitch:0,
@@ -98,18 +234,32 @@
   map.touchZoomRotate.disableRotation();
   map.on('style.load', ()=> { map.setBearing(0); map.setPitch(0); });
 
-  /* ── layer switch ───────────────────────────────────────────────────────── */
-  document.querySelectorAll('#controls button[data-layer]').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const tgt = btn.dataset.layer;
-      ['satellite','map','lidar'].forEach(l =>
-              map.setLayoutProperty(l,'visibility', l===tgt ? 'visible' : 'none')
+  /* ── layer switch with dynamic minZoom ───────────────────────────────────── */
+  document.querySelectorAll('#controls button[data-layer]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetLayer = btn.dataset.layer;
+
+      ['satellite', 'map', 'lidar'].forEach(layerId => {
+        const isVisible = layerId === targetLayer;
+        map.setLayoutProperty(layerId, 'visibility', isVisible ? 'visible' : 'none');
+      });
+
+      document.querySelectorAll('#controls button[data-layer]').forEach(b =>
+              b.classList.toggle('active', b === btn)
       );
-      document.querySelectorAll('#controls button[data-layer]').forEach(b=>
-              b.classList.toggle('active', b===btn)
-      );
+
+      // Adjust minZoom depending on layer
+      if (targetLayer === 'lidar') {
+        map.setMinZoom(minZoom_lidar);
+        if (map.getZoom() < minZoom_lidar) {
+          map.easeTo({ zoom: minZoom_lidar });
+        }
+      } else {
+        map.setMinZoom(minZoom_other);
+      }
     });
   });
+
 
   /* ── marker logic ───────────────────────────────────────────────────────── */
   let userMarker = null;
