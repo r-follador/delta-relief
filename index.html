@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>LiDAR Delta-Relief Graubünden</title>
+  <title>LiDAR Delta-Relief Switzerland</title>
 
   <!-- MapLibre GL JS (v5) -->
   <link href="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.css" rel="stylesheet">
@@ -58,140 +58,86 @@
       return [lon, lat];
     }
 
-    const east = parseFloat(p.get('east'));
-    const north = parseFloat(p.get('north'));
-
-    if (Number.isFinite(east) && Number.isFinite(north)) {
-      var coords = Swisstopo.CHtoWGS(east, north);
-      console.log('URL coords east north', east, north);
-      console.log('converted to', coords);
-      return [coords.lon, coords.lat];
+    const coordsParam = p.get('coords');
+    if (coordsParam) {
+      const [east, north] = coordsParam.split(',').map(parseFloat);
+      if (Number.isFinite(east) && Number.isFinite(north)) {
+        const coords = LV95.CHtoWGS(east, north);
+        //console.log('URL coords east,north:', east, north);
+        //console.log('converted to', coords);
+        return [coords.lon, coords.lat];
+      }
     }
 
     return null;
   }
 
   function shareURL(lon, lat){
-
-    var coordsCH = Swisstopo.WGStoCH(lat, lon)
-
-    const url = `${location.origin}${location.pathname}?east=${(coordsCH.east).toFixed(0)}&north=${(coordsCH.north).toFixed(0)}`;
+    const coordsCH = LV95.WGStoCH(lat, lon);
+    const url = `${location.origin}${location.pathname}?coords=${coordsCH.east.toFixed(0)},${coordsCH.north.toFixed(0)}`;
     history.replaceState(null, '', url);
     window.prompt('Share or copy this link', url);
   }
 
-  //Courtesy: https://github.com/ValentinMinder/Swisstopo-WGS84-LV03/blob/master/scripts/js/wgs84_ch1903.js
-  var Swisstopo = {
-    WGStoCH: function (lat, lng) {
-      return {
-        east: this.WGStoCHy(lat, lng),
-        north: this.WGStoCHx(lat, lng)
+  //Adapted from: https://github.com/ValentinMinder/Swisstopo-WGS84-LV03/blob/master/scripts/js/wgs84_ch1903.js
+  const LV95 = {
+    WGStoCH(lat, lng) {
+      function decToSex(angle) {
+        const deg = Math.floor(angle);
+        const min = Math.floor((angle - deg) * 60);
+        const sec = (((angle - deg) * 60) - min) * 60;
+        return sec + min * 60 + deg * 3600;
       }
+
+      const latSex = decToSex(lat);
+      const lngSex = decToSex(lng);
+
+      const latAux = (latSex - 169028.66) / 10000;
+      const lngAux = (lngSex - 26782.5) / 10000;
+
+      const east =
+              600072.37 +
+              211455.93 * lngAux -
+              10938.51 * lngAux * latAux -
+              0.36 * lngAux * Math.pow(latAux, 2) -
+              44.54 * Math.pow(lngAux, 3);
+
+      const north =
+              200147.07 +
+              308807.95 * latAux +
+              3745.25 * Math.pow(lngAux, 2) +
+              76.63 * Math.pow(latAux, 2) -
+              194.56 * Math.pow(lngAux, 2) * latAux +
+              119.79 * Math.pow(latAux, 3);
+
+      return { east, north };
     },
 
-    // Convert WGS lat/lng (° dec) to CH x
-    WGStoCHx: function (lat, lng) {
+    CHtoWGS(east, north) {
+      const yAux = (east - 600000) / 1000000;
+      const xAux = (north - 200000) / 1000000;
 
-      // Convert decimal degrees to sexagesimal seconds
-      lat = this.DECtoSEX(lat);
-      lng = this.DECtoSEX(lng);
+      let lat =
+              16.9023892 +
+              3.238272 * xAux -
+              0.270978 * yAux * yAux -
+              0.002528 * xAux * xAux -
+              0.0447 * yAux * yAux * xAux -
+              0.0140 * xAux * xAux * xAux;
 
-      // Auxiliary values (% Bern)
-      var lat_aux = (lat - 169028.66)/10000;
-      var lng_aux = (lng - 26782.5)/10000;
+      let lon =
+              2.6779094 +
+              4.728982 * yAux +
+              0.791484 * yAux * xAux +
+              0.1306 * yAux * xAux * xAux -
+              0.0436 * yAux * yAux * yAux;
 
-      // Process X
-      x = 200147.07 +
-              308807.95 * lat_aux  +
-              3745.25 * Math.pow(lng_aux,2) +
-              76.63 * Math.pow(lat_aux,2) -
-              194.56 * Math.pow(lng_aux,2) * lat_aux +
-              119.79 * Math.pow(lat_aux,3);
+      lat = (lat * 100) / 36;
+      lon = (lon * 100) / 36;
 
-      return x;
-    },
-
-    // Convert WGS lat/lng (° dec) to CH y
-    WGStoCHy: function (lat, lng) {
-      // Convert decimal degrees to sexagesimal seconds
-      lat = this.DECtoSEX(lat);
-      lng = this.DECtoSEX(lng);
-
-      // Auxiliary values (% Bern)
-      var lat_aux = (lat - 169028.66)/10000;
-      var lng_aux = (lng - 26782.5)/10000;
-
-      // Process Y
-      y = 600072.37 +
-              211455.93 * lng_aux -
-              10938.51 * lng_aux * lat_aux -
-              0.36 * lng_aux * Math.pow(lat_aux,2) -
-              44.54 * Math.pow(lng_aux,3);
-
-      return y;
-    },
-
-    CHtoWGS: function (y, x) {
-      return {
-        lon: this.CHtoWGSlng(y, x),
-        lat: this.CHtoWGSlat(y, x)
-      }
-    },
-
-    // Convert CH y/x to WGS lat
-    CHtoWGSlat: function (y, x) {
-      // Converts military to civil and to unit = 1000km
-      // Auxiliary values (% Bern)
-      var y_aux = (y - 600000)/1000000;
-      var x_aux = (x - 200000)/1000000;
-
-      // Process lat
-      var lat = 16.9023892 +
-              3.238272 * x_aux -
-              0.270978 * Math.pow(y_aux, 2) -
-              0.002528 * Math.pow(x_aux, 2) -
-              0.0447	 * Math.pow(y_aux, 2) * x_aux -
-              0.0140	 * Math.pow(x_aux, 3);
-
-      // Unit 10000" to 1 " and converts seconds to degrees (dec)
-      lat = lat * 100 / 36;
-
-      return lat;
-    },
-
-    // Convert CH y/x to WGS lng
-    CHtoWGSlng: function (y, x) {
-      // Converts military to civil and	to unit = 1000km
-      // Auxiliary values (% Bern)
-      var y_aux = (y - 600000)/1000000;
-      var x_aux = (x - 200000)/1000000;
-
-      // Process lng
-      var lng = 2.6779094 +
-              4.728982 * y_aux +
-              0.791484 * y_aux * x_aux +
-              0.1306	 * y_aux * Math.pow(x_aux, 2) -
-              0.0436	 * Math.pow(y_aux, 3);
-
-      // Unit 10000" to 1 " and converts seconds to degrees (dec)
-      lng = lng * 100 / 36;
-
-      return lng;
-    },
-
-    // Convert angle in decimal degrees to sexagesimal seconds
-    DECtoSEX: function (angle) {
-
-      // Extract DMS
-      var deg = parseInt(angle);
-      var min = parseInt((angle-deg)*60);
-      var sec = (((angle-deg)*60)-min)*60;
-
-      // Result sexagesimal seconds
-      return sec + min*60.0 + deg*3600.0;
-
+      return { lon: lon, lat: lat };
     }
-  }
+  };
 
   /* ── map style ───────────────────────────────────────────────────────────── */
   const style = {
