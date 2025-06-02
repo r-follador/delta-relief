@@ -48,8 +48,6 @@ Some examples of interesting features in Switzerland, click the LiDAR image to o
 > Help me extend this list! Send a pull request or mail to: [contact@cubetrek.com](mailto:contact@cubetrek.com) if
 > you know of any other interesting examples.
 
-See also the Jupyter Notebook ([delta-relief-notebook.ipynb](delta-relief_examples.ipynb)) for more examples in other places of Switzerland.
-
 ### Colm La Runga
 [![img.png](readme-files/colm-la-runga.png)](https://lidar.cubetrek.com/?lat=46.635453&lon=9.610046)
 
@@ -83,7 +81,7 @@ Sources:
 
 <img src="readme-files/franc_castel_2.png" alt="Franc Castel" width="250"/>
 
-A castle built in the 14th century castle, destroyed in 1536. Remnants were used as a quarry to build the neighboring farm houses.
+A castle built in the 14th century, destroyed in 1536. Remnants were used as a quarry to build the neighboring farm houses.
 
 Sources:
 - [Sainte-Croix, German](https://hls-dhs-dss.ch/de/articles/007583/2011-02-08/)
