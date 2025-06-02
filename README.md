@@ -37,13 +37,12 @@ This project aims to improve accessibility to the data in two main steps:
 
 This data is accessible on https://lidar.cubetrek.com
 
-[![img.png](readme-files/mobile_screenshot.png)](https://lidar.cubetrek.com)
 The online map allows to quickly pan to the current location via GPS and switch between three different map layers
 (LiDAR, this project; Aerial View and Map View, data from SwissTopo).
 
 ## Points of Interest
 
-Some examples of interesting features in Switzerland.
+Some examples of interesting features in Switzerland, click the LiDAR image to open the viewer.
 
 > [!NOTE]
 > Help me extend this list! Send a pull request or mail to: [contact@cubetrek.com](mailto:contact@cubetrek.com) if
@@ -122,7 +121,7 @@ Sources:
 <img src="https://www.site-of-the-month.ch/assets/Uploads/projects/_resampled/FillWzEwMDgsNjMwXQ/reconstruction-grabhugel-6-Tschumi-1953-151.jpg" alt="Grossholz" width="250"/>
 <img src="https://www.site-of-the-month.ch/assets/Uploads/projects/_resampled/FillWyIxNDA4Iiw4ODBd/Grabhugel-sunnenrain-photo-adb.jpg" alt="Grossholz" width="250"/>
 
-Burial grounds of the early Iron Age (800-450 BC), see also [1km southwest](https://lidar.cubetrek.com/?coords=575565,207751)
+Burial grounds of the early Iron Age (800-450 BC), another one can be found [1km southwest](https://lidar.cubetrek.com/?coords=575565,207751).
 
 Sources:
 - [Site of the Month - Switzerland's past](https://www.site-of-the-month.ch/en/grabhuegel/)
@@ -223,6 +222,11 @@ gdalbuildvrt -a_srs EPSG:2056 lv95.vrt calculated/*.tif
 gdalwarp -s_srs EPSG:2056 -t_srs EPSG:3857 -tap -tr 0.5 0.5 -r bilinear -co COMPRESS=DEFLATE -co TILED=YES -co BIGTIFF=YES lv95.vrt webmerc.tif
 gdal_translate -of MBTILES webmerc.tif lidar.mbtiles
 gdaladdo -r average lidar.mbtiles 2 4 8 16
+```
+Add an index to the mbtile (sqlite3) file to help mbtileserver get the tiles:
+
+```
+sqlite3 lidar.mbtiles "CREATE UNIQUE INDEX IF NOT EXISTS tiles_xyz_index ON tiles (zoom_level, tile_column, tile_row);"
 ```
 
 NGINX is used as a reverse proxy to relay between the client and the mbtileserver and also to host the static
