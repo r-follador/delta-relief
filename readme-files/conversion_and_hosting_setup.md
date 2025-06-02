@@ -7,6 +7,13 @@ gdal_translate -of MBTILES webmerc.tif lidar.mbtiles
 gdaladdo -r average lidar.mbtiles 2 4 8 16
 ```
 
+add an index to the mbtile file (it's actually just a sqlite3 file),
+seems to help mbtileserver as the file can be huge
+
+```
+sqlite3 lidar.mbtiles "CREATE UNIQUE INDEX IF NOT EXISTS tiles_xyz_index ON tiles (zoom_level, tile_column, tile_row);"
+```
+
 copy lidar.mbtiles to /home/rainer/tilesets
 
 run mbtileserver
