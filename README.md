@@ -98,6 +98,35 @@ Sources:
 - [Oujon Charterhouse, Wiki](https://en.wikipedia.org/wiki/Oujon_Charterhouse)
 - Picture [Tourism Nyon](https://www.lacote-tourisme.ch/fr/V1490/sentier-spirituel-d-oujon)
 
+### Kloster Mariaberg
+
+[![img.png](readme-files/mariaberg.png)](https://lidar.cubetrek.com/?coords=680919,239213)
+
+Monastery (nunnery) first time mentioned in 1248, closed after 1259.
+
+Sources:
+- [Burgenwelt, German](https://www.burgenwelt.org/schweiz/buchenegg/object.php)
+- [Kirchenmann Otto hat die Gemeinde Kilchberg geprägt, German](https://www.tagesanzeiger.ch/kirchenmann-otto-hat-die-gemeinde-kilchberg-gepraegt-633643673287)
+- Suggested by [/u/greg_gl on Reddit](https://www.reddit.com/r/Switzerland/comments/1l411s9/comment/mw6evhi/)
+
+### Sternenschanze 
+[![img.png](readme-files/sternenschanze.png)](https://lidar.cubetrek.com/?coords=694963,228075)
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Samstagern_-_neuzeitliche_Schanze_in_Richterswil_2011-09-05_16-56-46.JPG/960px-Samstagern_-_neuzeitliche_Schanze_in_Richterswil_2011-09-05_16-56-46.JPG" alt="Oujon" width="250"/>
+<img src="readme-files/sternenschanze2.png" alt="Oujon" width="250"/>
+
+
+A fortification used during the Sonderbund War (1847) by the Protestant Confederates against Schwyz (Sonderbund). Built likely earlier (First Villmerger Krieg, 1656).
+The nearby pond was created later in 1873
+
+See also the [Bellenschanze](https://lidar.cubetrek.com/?coords=694112,226934) and [Hüttnerschanze](https://lidar.cubetrek.com/?coords=693075,225530). 
+
+Sources:
+- [Die zürcherischen Schanzen an der schwyzerischen Grenze, German](http://www.villmergerkriege.ch/Schilderungen/Z%C3%BCrcherische%20Schanzen.htm)
+- [Ein Archäologe spürt historischen Stätten nach, German](https://www.tagesanzeiger.ch/ein-archaeologe-spuert-historischen-staetten-nach-449809614970)
+- Drawing: [Villmergerkriege](http://www.villmergerkriege.ch/03Sternenschanz/Fotoalbum.htm)
+- Suggested by [/u/N3XT191 on Reddit](https://www.reddit.com/r/Switzerland/comments/1l411s9/comment/mw62zkr/)
+
 ### Cresta Settlement in Cazis
 [![img.png](readme-files/cazis.png)](https://lidar.cubetrek.com/?lat=46.711225&lon=9.430793)
 
