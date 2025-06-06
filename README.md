@@ -76,6 +76,20 @@ Sources:
 - [Burgenverein Untervaz, PDF, German](https://download.burgenverein-untervaz.ch/downloads/dorfgeschichte/1639-Die%20Rohanschanze%20und%20ihre%20Schleifung.pdf)
 - [Rohanschanze, Wikipedia, German](https://de.wikipedia.org/wiki/Rohanschanze)
 
+### La Bonneville
+
+[![img.png](readme-files/bonneville.png)](https://lidar.cubetrek.com/?coords=560277,209378)
+
+Deserted settlement. Founded in the 13th century to attract settlers, destroyed in 1301.
+
+<img src="https://media.arcinfo.ch/media/image/71/nf_normal_4_3/la-bonneville-3457.jpg.webp" alt="Bonneville" width="250"/>
+
+
+Sources:
+- [La Bonneville](https://hls-dhs-dss.ch/de/articles/011502/2016-10-24/)
+- Picture source:  [Arcinfo](https://www.arcinfo.ch/neuchatel-canton/littoral/neuchatel-commune/valangin/la-bonneville-le-village-que-rodolphe-ne-voulait-plus-voir-772670)
+- Suggested by [u/itchibli on Reddit](https://www.reddit.com/r/Switzerland/comments/1l411s9/comment/mwbfm0s/)
+
 ### Franc Castel
 [![img.png](readme-files/franc_castel.png)](https://lidar.cubetrek.com/?coords=527313,187289)
 
@@ -102,10 +116,12 @@ Sources:
 
 [![img.png](readme-files/mariaberg.png)](https://lidar.cubetrek.com/?coords=680919,239213)
 
+<img src="readme-files/mariaberg2.png" alt="Mariaberg" height="200"/>
+
 Monastery (nunnery) first time mentioned in 1248, closed after 1259.
 
 Sources:
-- [Burgenwelt, German](https://www.burgenwelt.org/schweiz/buchenegg/object.php)
+- [Gemeinde Kilchberg Neujahrsblatt](https://www.kilchberg.ch/fileadmin/user_upload/gemeinde/Neujahrsblatt_Nr_051_2010_optimiert.pdf)
 - [Kirchenmann Otto hat die Gemeinde Kilchberg geprägt, German](https://www.tagesanzeiger.ch/kirchenmann-otto-hat-die-gemeinde-kilchberg-gepraegt-633643673287)
 - Suggested by [/u/greg_gl on Reddit](https://www.reddit.com/r/Switzerland/comments/1l411s9/comment/mw6evhi/)
 
@@ -148,12 +164,25 @@ Sources:
 <img src="https://www.site-of-the-month.ch/assets/Uploads/projects/_resampled/FillWzEwMDgsNjMwXQ/reconstruction-grabhugel-6-Tschumi-1953-151.jpg" alt="Grossholz" width="250"/>
 <img src="https://www.site-of-the-month.ch/assets/Uploads/projects/_resampled/FillWyIxNDA4Iiw4ODBd/Grabhugel-sunnenrain-photo-adb.jpg" alt="Grossholz" width="250"/>
 
-Burial grounds of the early Iron Age (800-450 BC), another one can be found [1km southwest](https://lidar.cubetrek.com/?coords=575565,207751).
+Burial grounds of the Iron Age (800-450 BCE), another one can be found [1km southwest](https://lidar.cubetrek.com/?coords=575565,207751).
 
 Sources:
 - [Site of the Month - Switzerland's past](https://www.site-of-the-month.ch/en/grabhuegel/)
 - [Fenis-Hasenburg, German](https://www.fenis-hasenburg.ch/)
 
+
+### Langenthal burial mounds
+[![img.png](readme-files/langenthal.png)](https://lidar.cubetrek.com/?coords=626314,231121)
+
+<img src="https://archaeologie.ideenset.ch/wp-content/uploads/2021/10/Nekropole_die_westlichen_Grabhu%CC%88gel-2048x1536.jpeg" alt="Langenthal" height="250"/>
+<img src="https://archaeologie.ideenset.ch/wp-content/uploads/2022/06/ADB_Max_Sto%CC%88ckli_Rekonstruktion_Grabhu%CC%88gel_Kernenried-1.jpg" alt="Langenthal" height="250"/>
+
+Burial grounds of the Iron Age (800-450 BCE), also used during the Roman and Early Medieval Ages.
+
+Sources:
+- [Grabhügel von Langenthal](https://archaeologie.ideenset.ch/grabhuegel-von-langenthal/)
+- [Die Grabhügel in Langenthal-Unterhard](https://www.museumlangenthal.ch/res/flyer/JBOAG_1999_098_106_grabhuegel.pdf)
+- Suggested by [u/de0fa on Reddit](https://www.reddit.com/r/Switzerland/comments/1l411s9/comment/mw7hbrt/)
 
 ### Châtel d'Arrufens
 [![img.png](readme-files/arrufens.png)](https://lidar.cubetrek.com/?coords=517083,163498)
@@ -182,6 +211,18 @@ The idea became popular again in the 20th Century under the Name "Transhelvetiqu
 Sources:
 - [Canal d'Entreroches - Wiki](https://en.wikipedia.org/wiki/Canal_d%27Entreroches)
 - [Transhelvetischer Kanal - Wiki, German](https://de.wikipedia.org/wiki/Transhelvetischer_Kanal)
+
+## Narrow-gauge train line "Winkeln - Herisau"
+[![img.png](readme-files/traintrack_herisau.png)](https://lidar.cubetrek.com/?coords=740837,251465)
+
+<img src="https://www.museumsverein-appenzeller-bahnen.ch/files/content_bahnmuseum/Contentimages/Ausstellungen/Gossau%20-%20Herisau/GH_T3/Bild_G_03_01.jpg" alt="winkeln-herisau" width="250"/>
+<img src="https://www.museumsverein-appenzeller-bahnen.ch/files/content_bahnmuseum/Contentimages/Ausstellungen/Gossau%20-%20Herisau/GH_T3/Bild_G_03_02.jpg" alt="winkeln-herisau" width="250"/>
+
+Narrow gauge train track connecting Winkeln and Herisau. Opened in 1875, abandoned in 1913.
+
+Sources:
+- [Museum Appenzeller Bahnen](https://www.museumsverein-appenzeller-bahnen.ch/gh_t3.html)
+- Suggested by [u/BezugssystemCH1903 on Reddit](https://www.reddit.com/r/Switzerland/comments/1l411s9/comment/mw79802/)
 
 ## Technical Details
 
@@ -242,7 +283,7 @@ host *mbtiles* so that they can be used as a map layer in [MapLibre JS](https://
 To create the mbtiles file, we
 
 - run the [create_geotiff.py](create_geotiff.py) script to download the GeoTiffs, convert the data as described above and save it as GeoTiff again
-- use [GDAL](https://gdal.org/en/stable/index.html) to build the mbtiles file while converting the GeoTIFF from LVB95 (the Swiss coordinates system) to Web Mercator (EPSG:3857).
+- use [GDAL](https://gdal.org/en/stable/index.html) to build the mbtiles file while converting the GeoTIFF from LV95 (the Swiss coordinates system) to Web Mercator (EPSG:3857).
 
 ```
 gdalbuildvrt -a_srs EPSG:2056 lv95.vrt calculated/*.tif
@@ -257,8 +298,4 @@ sqlite3 lidar.mbtiles "CREATE UNIQUE INDEX IF NOT EXISTS tiles_xyz_index ON tile
 ```
 
 NGINX is used as a reverse proxy to relay between the client and the mbtileserver and also to host the static
-[index file](index.html), that uses MabLibre JS.
-
-
-
-
+[index file](index.html), that uses MapLibre JS.
