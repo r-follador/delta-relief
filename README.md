@@ -224,6 +224,15 @@ Sources:
 - [Museum Appenzeller Bahnen](https://www.museumsverein-appenzeller-bahnen.ch/gh_t3.html)
 - Suggested by [u/BezugssystemCH1903 on Reddit](https://www.reddit.com/r/Switzerland/comments/1l411s9/comment/mw79802/)
 
+## Castle Rotenberg
+
+[![img.png](readme-files/rotenberg.png)](https://lidar.cubetrek.com/?coords=629706,232629)
+
+Wooden castle from the early 13th century, featuring a raised earthed mound (motte castle).
+
+Source:
+- [Die Burg Rotenberg - PDF](https://www.murgenthal.ch/public/upload/assets/2740/Die%20Burg%20Rotenberg_Teil%201.pdf)
+
 ## Technical Details
 
 ### Visualization of LiDAR data
